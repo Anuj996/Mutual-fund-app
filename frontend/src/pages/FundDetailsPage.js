@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import { baseURL } from "../config"; // ✅ import live backend URL
 
 export default function FundDetailsPage() {
   const { code } = useParams();
@@ -23,27 +24,33 @@ export default function FundDetailsPage() {
 
     const latestNav = fund.data?.[0]?.nav || "0";
 
-    const res = await fetch("http://localhost:5001/api/funds/save", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        schemeCode: code,
-        schemeName: fund.meta.scheme_name,
-        nav: latestNav,
-      }),
-    });
+    try {
+      const res = await fetch(`${baseURL}/api/funds/save`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          schemeCode: code,
+          schemeName: fund.meta.scheme_name,
+          nav: latestNav,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      alert("Fund saved!");
-    } else {
-      alert(data.message || "Failed to save fund.");
+      if (res.ok) {
+        alert("✅ Fund saved successfully!");
+      } else {
+        alert(data.message || "❌ Failed to save fund.");
+      }
+    } catch (err) {
+      console.error("Save fund error:", err);
+      alert("❌ Something went wrong. Please try again later.");
     }
   };
+
   if (!fund) return <div className="text-center mt-10">Loading...</div>;
 
   return (

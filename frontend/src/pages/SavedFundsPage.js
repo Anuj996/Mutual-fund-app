@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
+import { baseURL } from "../config"; // ✅ import baseURL from centralized config
 
 export default function SavedFundsPage() {
   const { token } = useContext(AuthContext);
@@ -9,7 +10,7 @@ export default function SavedFundsPage() {
   useEffect(() => {
     const fetchSavedFunds = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/funds/saved", {
+        const res = await fetch(`${baseURL}/api/funds/saved`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -24,6 +25,7 @@ export default function SavedFundsPage() {
         setSavedFunds(data.savedFunds);
       } catch (err) {
         console.error("Error fetching saved funds:", err);
+        alert("Unable to load saved funds. Please ensure you're logged in.");
       }
     };
 

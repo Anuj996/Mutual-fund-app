@@ -4,11 +4,21 @@ import { Link } from "react-router-dom";
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const searchFunds = async () => {
-    const res = await fetch(`https://api.mfapi.in/mf/search?q=${query}`);
-    const data = await res.json();
-    setResults(data);
+    if (!query.trim()) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`https://api.mfapi.in/mf/search?q=${query}`);
+      const data = await res.json();
+      setResults(data);
+    } catch (error) {
+      console.error("Search error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,6 +42,8 @@ export default function SearchPage() {
           Search
         </button>
       </div>
+
+      {loading && <p className="text-center text-blue-600">Searching...</p>}
 
       <ul className="max-w-2xl mx-auto space-y-4">
         {results.map((fund) => (

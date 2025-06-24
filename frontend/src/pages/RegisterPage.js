@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../config"; // ✅ import the backend base URL
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -12,24 +13,27 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5001/api/auth/register", {
+      const res = await fetch(`${baseURL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
 
       const data = await res.json();
+
       if (res.ok) {
-        const loginRes = await fetch("http://localhost:5001/api/auth/login", {
+        // ✅ Auto-login after registration
+        const loginRes = await fetch(`${baseURL}/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
 
         const loginData = await loginRes.json();
+
         if (loginData.token) {
           setToken(loginData.token);
-          navigate("/saved");
+          navigate("/saved"); // ✅ redirect to saved funds
         } else {
           alert(loginData.message || "Login failed after registration");
         }
