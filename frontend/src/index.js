@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css'; // ✅ Import Tailwind styles
+import './index.css'; 
 import App from './App';
 import { AuthProvider } from './context/AuthProvider';
 

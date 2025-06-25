@@ -26,14 +26,14 @@ export default function LoginPage() {
       if (response.ok && data.token) {
         localStorage.setItem("token", data.token);
         setToken(data.token);
-        alert("✅ Login successful!");
+        alert(" Login successful!");
         navigate("/search");
       } else {
-        alert("❌ Login failed: " + data.message);
+        alert(" Login failed: " + data.message);
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("❌ Something went wrong during login.");
+      alert(" Something went wrong during login.");
     }
   };
 
