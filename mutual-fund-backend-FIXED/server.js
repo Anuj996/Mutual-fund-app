@@ -9,7 +9,10 @@ const fundRoutes = require('./routes/fundRoutes');
 const app = express();
 
 app.use(cors({
-  origin: 'https://glowing-custard-27dae0.netlify.app',
+  origin: [
+    'https://glowing-custard-27dae0.netlify.app',
+    'http://localhost:3000'
+  ],
   credentials: true,
 }));
 
