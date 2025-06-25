@@ -1,2 +1,1 @@
-
-export const baseURL = "https://mutual-fund-app-avvs.onrender.com";
+export const baseURL = "https://mutual-fund-backend-x4vk.onrender.com";
