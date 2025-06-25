@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
-import { baseURL } from "../config"; // ✅ import baseURL from centralized config
+import { baseURL } from "../config";
 
 export default function SavedFundsPage() {
   const { token } = useContext(AuthContext);
@@ -17,9 +17,7 @@ export default function SavedFundsPage() {
           },
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch saved funds");
-        }
+        if (!res.ok) throw new Error("Failed to fetch saved funds");
 
         const data = await res.json();
         setSavedFunds(data.savedFunds);
@@ -33,30 +31,34 @@ export default function SavedFundsPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-center text-green-700 mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-10 px-6">
+      <h1 className="text-4xl font-bold text-center text-green-700 mb-10">
         Your Saved Mutual Funds
       </h1>
 
       {savedFunds.length === 0 ? (
-        <p className="text-center text-gray-600">No funds saved yet.</p>
+        <p className="text-center text-gray-600 text-lg">
+          You haven’t saved any mutual funds yet.
+        </p>
       ) : (
-        <ul className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {savedFunds.map((fund) => (
-            <li
+            <div
               key={fund.schemeCode}
-              className="bg-white p-4 shadow rounded hover:shadow-lg transition"
+              className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300"
             >
               <Link
                 to={`/fund/${fund.schemeCode}`}
-                className="text-lg text-blue-600 hover:underline"
+                className="text-xl font-semibold text-blue-700 hover:underline block mb-2"
               >
                 {fund.schemeName}
               </Link>
-              <p className="text-sm text-gray-500 mt-1">NAV: ₹{fund.nav}</p>
-            </li>
+              <p className="text-gray-600 text-sm">
+                Latest NAV: <span className="font-medium">₹{fund.nav}</span>
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
