@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash/debounce";
+import { useNavigate } from "react-router-dom"; // ✅ import navigate
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [selectedFund, setSelectedFund] = useState(null);
-  const [fundDetails, setFundDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // ✅ initialize navigate
 
   const fetchSearchResults = async (searchText) => {
     if (!searchText.trim()) return setResults([]);
@@ -29,23 +29,11 @@ export default function SearchPage() {
       debouncedSearch(query);
     } else {
       setResults([]);
-      setFundDetails(null);
     }
   }, [query]);
 
-  const fetchFundDetails = async (code) => {
-    try {
-      const res = await fetch(`https://api.mfapi.in/mf/${code}`);
-      const data = await res.json();
-      setFundDetails(data);
-    } catch (err) {
-      console.error("Details fetch error:", err);
-    }
-  };
-
   const handleFundClick = (fund) => {
-    setSelectedFund(fund);
-    fetchFundDetails(fund.schemeCode);
+    navigate(`/fund/${fund.schemeCode}`); // ✅ navigate to fund details page
   };
 
   return (
@@ -77,19 +65,6 @@ export default function SearchPage() {
           </li>
         ))}
       </ul>
-
-      {fundDetails && (
-        <div className="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-lg">
-          <h2 className="text-2xl font-bold text-blue-700 mb-4">
-            {fundDetails.meta.scheme_name}
-          </h2>
-          <p><strong>Fund House:</strong> {fundDetails.meta.fund_house}</p>
-          <p><strong>Scheme Type:</strong> {fundDetails.meta.scheme_type}</p>
-          <p><strong>Scheme Category:</strong> {fundDetails.meta.scheme_category}</p>
-          <p><strong>Latest NAV:</strong> ₹{fundDetails.data[0]?.nav}</p>
-          <p><strong>Last Updated:</strong> {fundDetails.data[0]?.date}</p>
-        </div>
-      )}
     </div>
   );
 }
