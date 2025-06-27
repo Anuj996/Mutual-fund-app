@@ -64,12 +64,17 @@ export default function FundDetailsPage() {
 
       <h1 className="text-2xl font-bold mb-4 text-blue-700">{fund.meta.scheme_name}</h1>
 
-      {/* ✅ Show full metadata */}
+      {/* ✅ Extended Fund Metadata */}
       <div className="mb-6 text-sm space-y-1">
         <p><strong>Fund House:</strong> {fund.meta.fund_house}</p>
         <p><strong>Scheme Type:</strong> {fund.meta.scheme_type}</p>
         <p><strong>Scheme Category:</strong> {fund.meta.scheme_category}</p>
         <p><strong>Plan:</strong> {fund.meta.plan}</p>
+        {fund.meta.isin && <p><strong>ISIN:</strong> {fund.meta.isin}</p>}
+        {fund.meta.benchmark && <p><strong>Benchmark:</strong> {fund.meta.benchmark}</p>}
+        {fund.meta.launch_date && <p><strong>Launch Date:</strong> {fund.meta.launch_date}</p>}
+        {fund.meta.exit_load && <p><strong>Exit Load:</strong> {fund.meta.exit_load}</p>}
+        {fund.meta.minimum_investment && <p><strong>Minimum Investment:</strong> ₹{fund.meta.minimum_investment}</p>}
       </div>
 
       <button
