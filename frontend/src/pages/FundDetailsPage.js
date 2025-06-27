@@ -8,29 +8,33 @@ export default function FundDetailsPage() {
   const navigate = useNavigate();
   const [fund, setFund] = useState(null);
   const { token } = useContext(AuthContext);
-  const [message, setMessage] = useState(""); // ✅ for on-page confirmation
+  const [message, setMessage] = useState(""); // For on-page confirmation
 
   useEffect(() => {
     fetch(`https://api.mfapi.in/mf/${code}`)
       .then((res) => res.json())
-      .then(setFund);
+      .then(setFund)
+      .catch((err) => {
+        console.error("Fetch fund error:", err);
+        setMessage("❌ Failed to load fund details.");
+      });
   }, [code]);
 
   const saveFund = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
       setMessage("❌ You must be logged in to save a fund.");
       return;
     }
 
-    const latestNav = fund.data?.[0]?.nav || "0";
+    const latestNav = fund?.data?.[0]?.nav || "0";
 
     try {
       const res = await fetch(`${baseURL}/api/funds/save`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${storedToken}`,
         },
         body: JSON.stringify({
           schemeCode: code,
@@ -40,12 +44,7 @@ export default function FundDetailsPage() {
       });
 
       const data = await res.json();
-
-      if (res.ok) {
-        setMessage("✅ Fund saved successfully!");
-      } else {
-        setMessage(data.message || "❌ Failed to save fund.");
-      }
+      setMessage(res.ok ? "✅ Fund saved successfully!" : data.message || "❌ Failed to save fund.");
     } catch (err) {
       console.error("Save fund error:", err);
       setMessage("❌ Something went wrong. Please try again later.");
@@ -67,7 +66,7 @@ export default function FundDetailsPage() {
 
       <button
         onClick={saveFund}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
       >
         Save Fund
       </button>
