@@ -53,6 +53,8 @@ export default function FundDetailsPage() {
 
   if (!fund) return <div className="text-center mt-10">Loading...</div>;
 
+  const meta = fund.meta;
+
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <button
@@ -62,14 +64,17 @@ export default function FundDetailsPage() {
         ← Go Back
       </button>
 
-      <h1 className="text-2xl font-bold mb-4 text-blue-700">{fund.meta.scheme_name}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-blue-700">
+        {meta.scheme_name}
+      </h1>
 
-      {/* ✅ Show full metadata */}
       <div className="mb-6 text-sm space-y-1">
-        <p><strong>Fund House:</strong> {fund.meta.fund_house}</p>
-        <p><strong>Scheme Type:</strong> {fund.meta.scheme_type}</p>
-        <p><strong>Scheme Category:</strong> {fund.meta.scheme_category}</p>
-        <p><strong>Plan:</strong> {fund.meta.plan}</p>
+        <p><strong>Fund House:</strong> {meta.fund_house}</p>
+        <p><strong>Scheme Type:</strong> {meta.scheme_type}</p>
+        <p><strong>Scheme Category:</strong> {meta.scheme_category}</p>
+        {meta.plan && <p><strong>Plan:</strong> {meta.plan}</p>}
+        {meta.benchmark && <p><strong>Benchmark:</strong> {meta.benchmark}</p>}
+        {meta.riskometer && <p><strong>Riskometer:</strong> {meta.riskometer}</p>}
       </div>
 
       <button
