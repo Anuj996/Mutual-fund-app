@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash/debounce";
-import { useNavigate } from "react-router-dom"; // ✅ import navigate
+import { useNavigate } from "react-router-dom";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // ✅ initialize navigate
+  const navigate = useNavigate();
 
   const fetchSearchResults = async (searchText) => {
     if (!searchText.trim()) return setResults([]);
@@ -33,7 +33,7 @@ export default function SearchPage() {
   }, [query]);
 
   const handleFundClick = (fund) => {
-    navigate(`/fund/${fund.schemeCode}`); // ✅ navigate to fund details page
+    navigate(`/fund/${fund.schemeCode}`);
   };
 
   return (
